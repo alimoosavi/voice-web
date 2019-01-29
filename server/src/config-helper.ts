@@ -34,7 +34,7 @@ const DEFAULTS: CommonVoiceConfig = {
   PROD: false, // Set to true for staging and production.
   SERVER_PORT: 9000,
   DB_ROOT_USER: 'root', // For running schema migrations.
-  DB_ROOT_PASS: '',
+  DB_ROOT_PASS: '0480825262',
   MYSQLUSER: 'voicecommons', // For normal DB interactions.
   MYSQLPASS: 'voicecommons',
   MYSQLDBNAME: 'voiceweb',

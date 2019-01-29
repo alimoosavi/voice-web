@@ -8,7 +8,7 @@ services:
       - MYSQL_DATABASE=voiceweb
       - MYSQL_USER=voicecommons
       - MYSQL_PASSWORD=voicecommons
-      - MYSQL_ROOT_PASSWORD=voicewebroot
+      - MYSQL_ROOT_PASSWORD=0480825262
   s3proxy:
     image: andrewgaul/s3proxy
     networks:

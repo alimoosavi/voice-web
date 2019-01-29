@@ -3,11 +3,7 @@ FROM node:8-stretch
 # Allow exposing HTTP endpoint
 EXPOSE 9000
 
-# Add project source
-COPY . /code
 
-# Setup work directory
-WORKDIR /code
 
 # Install dependencies
 RUN apt-get update && \
@@ -16,6 +12,13 @@ RUN apt-get update && \
     echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list && \
     apt-get update && \
     apt-get install --no-install-recommends -y yarn ffmpeg
+
+# Add project source
+COPY . /code
+
+# Setup work directory
+WORKDIR /code
+
 
 # Install yarn dependencies
 RUN yarn
