@@ -9,8 +9,9 @@ import Model from './model';
 import getLeaderboard from './model/leaderboard';
 import Bucket from './bucket';
 import { ClientParameterError } from './utility';
-
+import { clipsDirectory } from '../configs';
 const Transcoder = require('stream-transcoder');
+const fs = require('fs');
 
 const SALT = '8hd3e8sddFSdfj';
 
@@ -112,59 +113,71 @@ export default class Clip {
     }
 
     // Where is our audio clip going to be located?
-    const folder = client_id + '/';
+    const folder = client_id + '-';
     const filePrefix = hash(sentence);
     const clipFileName = folder + filePrefix + '.mp3';
     const sentenceFileName = folder + filePrefix + '.txt';
 
-    // if the folder does not exist, we create it
-    await this.s3
-      .putObject({ Bucket: getConfig().BUCKET_NAME, Key: folder })
-      .promise();
+    // Todo: if the folder does not exist, we create it
+    // await this.s3
+    //   .putObject({ Bucket: getConfig().BUCKET_NAME, Key: folder })
+    //   .promise();
+    //
+    // // If upload was base64, make sure we decode it first.
+    // let transcoder;
+    // if ((headers['content-type'] as string).includes('base64')) {
+    //   // If we were given base64, we'll need to concat it all first
+    //   // So we can decode it in the next step.
+    //   const chunks: Buffer[] = [];
+    //   await new Promise(resolve => {
+    //     request.on('data', (chunk: Buffer) => {
+    //       chunks.push(chunk);
+    //     });
+    //     request.on('end', resolve);
+    //   });
+    //
+    //   const passThrough = new PassThrough();
+    //   passThrough.end(Buffer.from(Buffer.concat(chunks).toString(), 'base64'));
+    //   transcoder = new Transcoder(passThrough);
+    // } else {
+    //   // For non-base64 uploads, we can just stream data.
+    //   transcoder = new Transcoder(request);
+    // }
+    //
+    // await Promise.all([
+    //   this.s3
+    //     .upload({
+    //       Bucket: getConfig().BUCKET_NAME,
+    //       Key: clipFileName,
+    //       Body: transcoder
+    //         .audioCodec('mp3')
+    //         .format('mp3')
+    //         .stream(),
+    //     })
+    //     .promise(),
+    //   this.s3
+    //     .putObject({
+    //       Bucket: getConfig().BUCKET_NAME,
+    //       Key: sentenceFileName,
+    //       Body: sentence,
+    //     })
+    //     .promise(),
+    // ]);
+    //
+    // console.log('file written to s3', clipFileName);
 
-    // If upload was base64, make sure we decode it first.
-    let transcoder;
-    if ((headers['content-type'] as string).includes('base64')) {
-      // If we were given base64, we'll need to concat it all first
-      // So we can decode it in the next step.
-      const chunks: Buffer[] = [];
-      await new Promise(resolve => {
-        request.on('data', (chunk: Buffer) => {
-          chunks.push(chunk);
-        });
-        request.on('end', resolve);
+    const chunks: Buffer[] = [];
+    await new Promise(resolve => {
+      request.on('data', (chunk: Buffer) => {
+        chunks.push(chunk);
       });
-
-      const passThrough = new PassThrough();
-      passThrough.end(Buffer.from(Buffer.concat(chunks).toString(), 'base64'));
-      transcoder = new Transcoder(passThrough);
-    } else {
-      // For non-base64 uploads, we can just stream data.
-      transcoder = new Transcoder(request);
-    }
-
-    await Promise.all([
-      this.s3
-        .upload({
-          Bucket: getConfig().BUCKET_NAME,
-          Key: clipFileName,
-          Body: transcoder
-            .audioCodec('mp3')
-            .format('mp3')
-            .stream(),
-        })
-        .promise(),
-      this.s3
-        .putObject({
-          Bucket: getConfig().BUCKET_NAME,
-          Key: sentenceFileName,
-          Body: sentence,
-        })
-        .promise(),
-    ]);
-
-    console.log('file written to s3', clipFileName);
-
+      request.on('end', resolve);
+    });
+    //   // Todo: save voice on local server
+    console.log(clipsDirectory + clipFileName, 'file path');
+    fs.writeFile(clipsDirectory + clipFileName, Buffer.concat(chunks));
+    //
+    //
     await this.model.saveClip({
       client_id: client_id,
       locale: params.locale,

@@ -1,2 +1,2 @@
 export const base_url = 'http://localhost:9000/api/v1/';
-export const clipsDirectory = '/home/ali/voice-web/clips/';
+export const clipsDirectory = '/code/';
