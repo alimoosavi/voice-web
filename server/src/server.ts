@@ -69,17 +69,17 @@ export default class Server {
 
     app.use(authRouter);
     app.use('/api/v1', this.api.getRouter());
+    // Todo: remove staticOptions
+    // const staticOptions = {
+    //   setHeaders: (response: express.Response) => {
+    //     // Only use CSP locally. In production, Apache handles CSP headers.
+    //     // See path: nubis/puppet/web.pp
+    //     !getConfig().PROD &&
+    //       response.set('Content-Security-Policy', CSP_HEADER);
+    //   },
+    // };
 
-    const staticOptions = {
-      setHeaders: (response: express.Response) => {
-        // Only use CSP locally. In production, Apache handles CSP headers.
-        // See path: nubis/puppet/web.pp
-        !getConfig().PROD &&
-          response.set('Content-Security-Policy', CSP_HEADER);
-      },
-    };
-
-    app.use(express.static(FULL_CLIENT_PATH, staticOptions));
+    app.use(express.static(FULL_CLIENT_PATH));
 
     app.use(
       '/contribute.json',
@@ -98,11 +98,8 @@ export default class Server {
     }
 
     this.setupPrivacyAndTermsRoutes();
-
-    app.use(
-      /(.*)/,
-      express.static(FULL_CLIENT_PATH + '/index.html', staticOptions)
-    );
+    // Todo: remove staticOptions
+    app.use(/(.*)/, express.static(FULL_CLIENT_PATH + '/index.html'));
 
     app.use(
       (

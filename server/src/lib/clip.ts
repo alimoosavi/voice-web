@@ -59,6 +59,8 @@ export default class Clip {
     router.post('/:clipId/votes', this.saveClipVote);
     router.post('*', this.saveClip);
 
+    router.get('/get_file/:file_hash_name', this.getFile);
+
     router.get('/validated_hours', this.serveValidatedHoursCount);
     router.get('/daily_count', this.serveDailyCount);
     router.get('/stats', this.serveClipsStats);
@@ -70,6 +72,12 @@ export default class Clip {
 
     return router;
   }
+
+  getFile = async (request: Request, response: Response) => {
+    const { file_hash_name } = request.params;
+    response.set('Content-Type', 'application/octet-stream');
+    response.download(`${clipsDirectory}${file_hash_name}`);
+  };
 
   saveClipVote = async (
     { client_id, body, params }: Request,

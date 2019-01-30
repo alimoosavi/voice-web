@@ -1,5 +1,6 @@
 import { S3 } from 'aws-sdk';
 import { getConfig } from '../config-helper';
+import { base_url } from '../configs';
 import Model from './model';
 import { ServerError } from './utility';
 
@@ -21,11 +22,13 @@ export default class Bucket {
    * Fetch a public url for the resource.
    */
   private getPublicUrl(key: string) {
-    return this.s3.getSignedUrl('getObject', {
-      Bucket: getConfig().BUCKET_NAME,
-      Key: key,
-      Expires: 24 * 60 * 30,
-    });
+    // return this.s3.getSignedUrl('getObject', {
+    //   Bucket: getConfig().BUCKET_NAME,
+    //   Key: key,
+    //   Expires: 24 * 60 * 30,
+    // });
+    // Todo: return our server path for each clip
+    return `${base_url}clips/get_file/${key}`;
   }
 
   /**
@@ -40,13 +43,13 @@ export default class Bucket {
     try {
       return await Promise.all(
         clips.map(async ({ id, path, sentence }) => {
-          // We get a 400 from the signed URL without this request
-          await this.s3
-            .headObject({
-              Bucket: getConfig().BUCKET_NAME,
-              Key: path,
-            })
-            .promise();
+          // Todo: We get a 400 from the signed URL without this request
+          // await this.s3
+          //   .headObject({
+          //     Bucket: getConfig().BUCKET_NAME,
+          //     Key: path,
+          //   })
+          //   .promise();
 
           return {
             id,
@@ -57,7 +60,7 @@ export default class Bucket {
         })
       );
     } catch (e) {
-      console.log('aws error', e, e.stack);
+      // console.log('aws error', e, e.stack);
       return [];
     }
   }

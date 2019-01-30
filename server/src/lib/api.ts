@@ -4,6 +4,7 @@ import { NextFunction, Request, Response, Router } from 'express';
 import * as sendRequest from 'request-promise-native';
 import { UserClient as UserClientType } from 'common/user-clients';
 import { getConfig } from '../config-helper';
+import { clipsDirectory } from '../configs';
 import getGoals from './model/goals';
 import UserClient from './model/user-client';
 import Model from './model';
@@ -69,6 +70,7 @@ export default class API {
     });
 
     router.get('/user_clients', this.getUserClients);
+    router.get('/get_file/:file_hash_name', this.getFile);
     router.post('/user_clients/:client_id/claim', this.claimUserClient);
     router.get('/user_client', this.getAccount);
     router.patch('/user_client', this.saveAccount);
@@ -109,6 +111,13 @@ export default class API {
 
     return router;
   }
+
+  getFile = async (request: Request, response: Response) => {
+    const { file_hash_name } = request.params;
+    // Todo: check if file_hash_name does not exist
+    response.set('Content-Type', 'application/octet-stream');
+    response.download(`${clipsDirectory}${file_hash_name}`);
+  };
 
   getRandomSentences = async (request: Request, response: Response) => {
     const { client_id, params } = request;
