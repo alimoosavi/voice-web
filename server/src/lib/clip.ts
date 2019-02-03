@@ -94,17 +94,17 @@ export default class Clip {
     await this.model.db.saveVote(id, client_id, isValid);
 
     const glob = clip.path.replace('.mp3', '');
-    const voteFile = glob + '-by-' + client_id + '.vote';
+    // const voteFile = glob + '-by-' + client_id + '.vote';
 
-    await this.s3
-      .putObject({
-        Bucket: getConfig().BUCKET_NAME,
-        Key: voteFile,
-        Body: isValid.toString(),
-      })
-      .promise();
-
-    console.log('clip vote written to s3', voteFile);
+    // await this.s3
+    //   .putObject({
+    //     Bucket: getConfig().BUCKET_NAME,
+    //     Key: voteFile,
+    //     Body: isValid.toString(),
+    //   })
+    //   .promise();
+    //
+    // console.log('clip vote written to s3', voteFile);
 
     response.json(glob);
   };

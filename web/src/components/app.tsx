@@ -148,9 +148,9 @@ let LocalizedPage: any = class extends React.Component<
     const pathname = history.location.pathname;
 
     // Since we make no distinction between "en-US", "en-UK",... we redirect them all to "en"
-    if (mainLocale.startsWith('en-')) {
-      this.props.setLocale('en');
-      history.replace(replacePathLocale(pathname, 'en'));
+    if (mainLocale.startsWith('fa-')) {
+      this.props.setLocale('fa');
+      history.replace(replacePathLocale(pathname, 'fa'));
       return;
     }
 
@@ -287,17 +287,19 @@ class App extends React.Component {
     if (isMobileWebkit()) {
       document.body.classList.add('mobile-safari');
     }
-
-    this.userLocales = negotiateLocales(navigator.languages);
+    // Todo: use fa as default language
+    this.userLocales = ['fa'];
+    // this.userLocales = negotiateLocales(navigator.languages);
   }
 
-  async componentDidMount() {
-    if (!isProduction()) {
-      const script = document.createElement('script');
-      script.src = 'https://pontoon.mozilla.org/pontoon.js';
-      document.head.appendChild(script);
-    }
-  }
+  // Todo: do not append script
+  // async componentDidMount() {
+  //   if (!isProduction()) {
+  //     const script = document.createElement('script');
+  //     script.src = 'https://pontoon.mozilla.org/pontoon.js';
+  //     document.head.appendChild(script);
+  //   }
+  // }
 
   async componentDidCatch(error: Error, errorInfo: any) {
     this.setState({ error });
@@ -305,17 +307,17 @@ class App extends React.Component {
     if (!isProduction() && !isStaging()) {
       return;
     }
-    const Sentry = await import('@sentry/browser');
-    Sentry.init({
-      dsn: 'https://e0ca8e37ef77492eb3ff46caeca385e5@sentry.io/1352219',
-    });
-    Sentry.withScope(scope => {
-      Object.keys(errorInfo).forEach(key => {
-        scope.setExtra(key, errorInfo[key]);
-      });
-      Sentry.captureException(error);
-    });
-    this.setState({ Sentry });
+    // const Sentry = await import('@sentry/browser');
+    // Sentry.init({
+    //   dsn: 'https://e0ca8e37ef77492eb3ff46caeca385e5@sentry.io/1352219',
+    // });
+    // Sentry.withScope(scope => {
+    //   Object.keys(errorInfo).forEach(key => {
+    //     scope.setExtra(key, errorInfo[key]);
+    //   });
+    //   Sentry.captureException(error);
+    // });
+    // this.setState({ Sentry });
   }
 
   /**
@@ -332,7 +334,10 @@ class App extends React.Component {
         <div>
           An error occurred. Sorry!
           <br />
-          <button onClick={() => Sentry.showReportDialog()} disabled={!Sentry}>
+          <button
+          // Todo: we should not feedback to mozilla sentry on catching error
+          // onClick={() => Sentry.showReportDialog()} disabled={!Sentry}
+          >
             Report feedback
           </button>
           <br />
