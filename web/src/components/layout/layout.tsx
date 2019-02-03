@@ -196,13 +196,13 @@ class Layout extends React.PureComponent<LayoutProps, LayoutState> {
           </div>
           <div>
             {this.renderTallies()}
-            {user.account ? (
-              <UserMenu />
-            ) : isBuildingProfile ? null : (
-              <Localized id="login-signup">
-                <LinkButton className="login" href="/login" rounded outline />
-              </Localized>
-            )}
+            {/*{user.account ? (*/}
+            {/*<UserMenu />* // Todo remove login button from page header/}
+            {/*) : isBuildingProfile ? null : (*/}
+            {/*<Localized id="login-signup">*/}
+            {/*<LinkButton className="login" href="/login" rounded outline />*/}
+            {/*</Localized>*/}
+            {/*)}*/}
             {LOCALES.length > 1 && (
               <LocalizationSelect
                 locale={locale}
@@ -270,19 +270,19 @@ class Layout extends React.PureComponent<LayoutProps, LayoutState> {
                   </LocaleNavLink>
                 </div>
               )}
-              {!isBuildingProfile && (
-                <React.Fragment>
-                  {user.account ? (
-                    <Localized id="logout">
-                      <LinkButton rounded href="/logout" />
-                    </Localized>
-                  ) : (
-                    <Localized id="login-signup">
-                      <LinkButton rounded href="/login" />
-                    </Localized>
-                  )}
-                </React.Fragment>
-              )}
+              {/*{!isBuildingProfile && Todo remove log out and login button   (*/}
+              {/*<React.Fragment>*/}
+              {/*{user.account ? (*/}
+              {/*<Localized id="logout">*/}
+              {/*<LinkButton rounded href="/logout" />*/}
+              {/*</Localized>*/}
+              {/*) : (*/}
+              {/*<Localized id="login-signup">*/}
+              {/*<LinkButton rounded href="/login" />*/}
+              {/*</Localized>*/}
+              {/*)}*/}
+              {/*</React.Fragment>*/}
+              {/*)}*/}
             </div>
           </Nav>
         </div>

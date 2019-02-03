@@ -143,16 +143,16 @@ class Success extends React.Component<Props, State> {
           />
         </div>
 
-        {!hasAccount && (
-          <div className="profile-card">
-            <Localized id="profile-explanation">
-              <p />
-            </Localized>
-            <Localized id="login-signup">
-              <LinkButton rounded href="/login" />
-            </Localized>
-          </div>
-        )}
+        {/*{!hasAccount && Todo remove login button after successfully validating voices or speaking on sentences(*/}
+        {/*<div className="profile-card">*/}
+        {/*<Localized id="profile-explanation">*/}
+        {/*<p />*/}
+        {/*</Localized>*/}
+        {/*<Localized id="login-signup">*/}
+        {/*<LinkButton rounded href="/login" />*/}
+        {/*</Localized>*/}
+        {/*</div>*/}
+        {/*)}*/}
 
         <ContributeMoreButton>
           {type === 'speak' ? <MicIcon /> : <PlayOutlineIcon />}
